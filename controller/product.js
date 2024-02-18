@@ -1,7 +1,28 @@
-const fs = require('fs')
-const product = fs.readFileSync("./jsonData.json");
-const data = JSON.parse(product);
-const products= data.products 
+// const fs = require('fs')
+// const product = fs.readFileSync("./jsonData.json");
+// const data = JSON.parse(product);
+// const products= data.products 
+
+const model = require('../model/product')
+const Product = model.Product
+
+
+exports.addProduct = async(req, res) => {
+    const product = new Product({ 
+        "id": 4,
+        "title": "iPhonssdasdasde 9",
+        "description": "Ansadsadsa apple mobile which is nothing like apple",
+        "price": 59});
+    await product.save();
+
+    console.log(product);
+
+    res.send('product added!')
+
+    // const newProduct = products.push(req.body)
+    // console.log(newProduct)
+    // res.json(newProduct)
+}
 
 exports.getAllProducts = (req, res) => {
     res.json(products)
@@ -11,12 +32,6 @@ exports.getProduct = (req, res) => {
     const id = req.params.id
     const product = products.find(e => e.id == id)
     res.send(product)
-}
-
-exports.addProduct = (req, res) => {
-    const newProduct = products.push(req.body)
-    console.log(newProduct)
-    res.json(newProduct)
 }
 
 exports.replaceProduct = (req, res) => {
