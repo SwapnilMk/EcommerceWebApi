@@ -3,9 +3,11 @@ const app = express()
 const dotenv = require("dotenv").config();
 const port = process.env.PORT;
 const productRouter = require('./routes/product')
+const userRouter = require('./routes/user')
 
 app.use(express.json());
-app.use('/api', productRouter.router)
+app.use('/api/products', productRouter.router)
+app.use('/api/users', userRouter.router)
 
 
 

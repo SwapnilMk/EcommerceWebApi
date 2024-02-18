@@ -1,7 +1,7 @@
 const fs = require('fs')
-
 const product = fs.readFileSync("./jsonData.json");
-const products = JSON.parse(product);
+const data = JSON.parse(product);
+const products= data.products 
 
 exports.getAllProducts = (req, res) => {
     res.json(products)
@@ -33,7 +33,6 @@ exports.updateProduct = (req, res) => {
     const updatedProduct = products.splice(index, 1, { ...product, ...req.body, id: id })
     res.json(updatedProduct)
 }
-
 
 exports.deleteProduct = (req, res) => {
     const id = req.params.id;
