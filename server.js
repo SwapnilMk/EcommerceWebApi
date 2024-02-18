@@ -1,19 +1,13 @@
 const express = require("express");
-const app = express();
+const app = express()
 const dotenv = require("dotenv").config();
 const port = process.env.PORT;
-const productController = require('./controller/product')
+const productRouter = require('./routes/product')
 
 app.use(express.json());
+app.use('/api', productRouter.router)
 
 
-
-app.get("/products", productController.getAllProducts)
-    .get("/products/:id", productController.getProduct)
-    .post("/products", productController.addProduct)
-    .put('/products/:id', productController.replaceProduct)
-    .patch('/products/:id', productController.updateProduct)
-    .delete("/products/:id", productController.deleteProduct);
 
 
 
@@ -63,5 +57,5 @@ app.get("/products", productController.getAllProducts)
 
 
 app.listen(port, () => {
-    console.log(`server is running on http://localhost:${port}`);
+    console.log(`server is running on http://localhost:${port}/api/products`);
 });
