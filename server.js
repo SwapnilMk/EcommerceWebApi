@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express()
 const dotenv = require("dotenv").config();
+const cors = require('cors')
 const mongoose = require('mongoose')
 const port = process.env.PORT;
 const productRouter = require('./routes/product')
@@ -19,7 +20,7 @@ async function main() {
 
 
 
-
+app.use(cors())
 app.use(express.json());
 app.use('/products', productRouter.router)
 app.use('/api/users', userRouter.router)
