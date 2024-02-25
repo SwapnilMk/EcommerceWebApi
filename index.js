@@ -5,8 +5,10 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const port = process.env.PORT || 8080;
 const path = require('path')
+const bodyParser = require('body-parser')
 const productRouter = require('./routes/product')
 const userRouter = require('./routes/user')
+
 
 
 main().catch(err => console.log(err));
@@ -18,8 +20,8 @@ async function main() {
 
 
 
-
-
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(cors())
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)))
