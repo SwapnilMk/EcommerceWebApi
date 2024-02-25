@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const cors = require('cors')
 const mongoose = require('mongoose')
 const port = process.env.PORT;
+const path = require('path')
 const productRouter = require('./routes/product')
 const userRouter = require('./routes/user')
 
@@ -13,8 +14,7 @@ main().catch(err => console.log(err));
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/test');
     console.log("database connected!")
-}
-
+}   
 
 
 
@@ -22,8 +22,12 @@ async function main() {
 
 app.use(cors())
 app.use(express.json());
-app.use('/products', productRouter.router)
+app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)))
+app.use('/api/products', productRouter.router)
 app.use('/api/users', userRouter.router)
+app.use('*', (req, res)=>{
+    res.sendFile(path.resolve(__dirname, 'dist' , 'index.html'))
+})
 
 
 
@@ -75,5 +79,5 @@ app.use('/api/users', userRouter.router)
 
 
 app.listen(port, () => {
-    console.log(`server is running on http://localhost:${port}/products`);
+    console.log(`server is running on http://localhost:${port}`);
 });
