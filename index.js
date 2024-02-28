@@ -1,14 +1,13 @@
 const express = require("express");
 const app = express()
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const cors = require('cors')
 const mongoose = require('mongoose')
 const port = process.env.PORT || 8080;
 const path = require('path')
 const productRouter = require('./routes/product')
-const userRouter = require('./routes/user')
-
-
+// const userRouter = require('./routes/user')
+const jwt = require('jsonwebtoken')
 
 main().catch(err => console.log(err));
 
@@ -21,9 +20,9 @@ async function main() {
 
 app.use(cors())
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)))
+// app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)))
 app.use('/api/products', productRouter.router)
-app.use('/api/users', userRouter.router)
+// app.use('/api/users', userRouter.router)
 app.use('*', (req, res)=>{
     res.sendFile(path.resolve(__dirname, 'public' , 'index.html'))
 })
