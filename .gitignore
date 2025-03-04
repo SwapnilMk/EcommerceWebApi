@@ -1,18 +1,7 @@
-# dependencies
-/node_modules
-
-# build artifacts
-/build
-/dist
-
-# environment variables
+node_modules/
 .env
-
-# editor and IDE files
-.vscode
-.idea
-*.sublime-workspace
-
-# log files
+logs/
+public/uploads/
+dist/
 *.log
-npm-debug.log*
+newrelic_agent.log
