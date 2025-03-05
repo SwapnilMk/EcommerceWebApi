@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_IP }} << 'EOF'
+            # Stop and remove existing container (if any)
+            docker ps -q | xargs -r docker stop
+            docker ps -a -q | xargs -r docker rm
+            
+            # Remove old image (if exists)
+            docker images -q shopping-app-backend | xargs -r docker rmi
+            
+            # Pull latest code
+            if [ -d "EcommerceWebApi" ]; then
+              cd EcommerceWebApi
+              git pull origin main
+            else
+              git clone git@github.com:SwapnilMk/EcommerceWebApi.git
+              cd EcommerceWebApi
+            fi
+            
+            # Build and run new container
+            docker build -t shopping-app-backend:latest .
+            docker run -d -p 3000:3000 --env-file .env shopping-app-backend:latest
+          EOF
